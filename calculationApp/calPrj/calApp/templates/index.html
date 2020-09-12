@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Calculation App</title>
+  </head>
+  <body>
+    <div class="container">
+    	<br><br>
+    	<div style="width: 50%;">
+	    	<form method="post" action="{% url 'show' %}">
+	    		{% csrf_token %}
+	    		<h4>Pipe Data</h4>
+				  	<div class="form-group">
+				    	<label for="text">Pipe Outside Diameter(OD)</label>
+				    	<input type="text" class="form-control" name="pod" value="10.75">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">Pipe Wall Thickness(t)</label>
+				    	<input type="text" class="form-control" name="pwt" value="0.5">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">Pipe Density</label>
+				    	<input type="text" class="form-control" name="pd" value="490">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">Corrosion Allowlance</label>
+				    	<input type="text" class="form-control" name="ca" value="0.125">
+				  	</div>
+				<h4>External Coating Data</h4>
+				  	<div class="form-group">
+				    	<label for="text">FBE (Thickness)</label>
+				    	<input type="text" class="form-control" name="fbet" value="0.0118">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">FBE (Density)</label>
+				    	<input type="text" class="form-control" name="fbed" value="81.16">
+				  	</div>
+				<h4>Pipeline Contents Data</h4>
+					<div class="form-group">
+				    	<label for="text">Installation Empty (Air Density)</label>
+				    	<input type="text" class="form-control" name="ad" value="0">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">Flooded (Water Density)</label>
+				    	<input type="text" class="form-control" name="wd" value="64">
+				  	</div>
+				  	<div class="form-group">
+				    	<label for="text">Hydrotest (Sea Water Density)</label>
+				    	<input type="text" class="form-control" name="swd" value="64.7">
+				  	</div>
+			  	<button type="submit" class="btn btn-primary">Calculate</button>
+			</form>
+
+
+			<br><br>
+			<br>
+			<h5>Calculation Details</h5>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">Description</th>
+			      <th scope="col">Values</th>
+			      <th scope="col">Units</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td>Pipe Inside Radius - r1</td>
+			      <td>{{ r1 }}</td>
+			      <td>in</td>
+			    </tr>
+			    <tr>
+			      <td>Pipe Outside Radius - r2</td>
+			      <td>{{ r2 }}</td>
+			      <td>in</td>
+			    </tr>
+			    <tr>
+			      <td>Outer Radius Of Coating- r3</td>
+			      <td>{{ r3 }}</td>
+			      <td>in</td>
+			    </tr>
+			    <tr>
+			      <td>Total Pipeline Outside Diameter</td>
+			      <td>{{ tpod }}</td>
+			      <td></td>
+			    </tr>
+			  </tbody>
+			</table>
+			<br>
+
+			<h5>Calculate Dry Unit Weight</h5>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">Description</th>
+			      <th scope="col">Installation Empty</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td>Pipe Weight per Unit Length in Air (lb/ft):</td>
+			      <td>{{ pwpu }}</td>
+			    </tr>
+			    <tr>
+			      <td>Coating 1 Wt. per Unit Length in Air (lb/ft):</td>
+			      <td>{{ c1wpu }}</td>			      
+			    </tr>
+			    <tr>
+			      <td>Contents Wt. Per Unit Length in Air (lb/ft):</td>
+			      <td>{{ cwpu }}</td>			      
+			    </tr>
+			    <tr>
+			      <td>Total Weight per Unit Length in Air (lb/ft):</td>
+			      <td>{{ twpu }}</td>			      
+			    </tr>
+			    <tr>
+			      <td>Buoyant Force per Unit Length (lb/ft):</td>
+			      <td>{{ bfpu }}</td>			      
+			    </tr>
+			  </tbody>
+			</table>
+			<br>
+
+			<h5>Summary of Submerged Weight</h5>
+			<table class="table">
+			  <thead>
+			    <tr>
+			      <th scope="col">Description</th>
+			      <th scope="col">Submerged Weight/Unit Length (lb/ft)</th>
+			      <th>Subm. Specific Gravity with respect to S.W.</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr>
+			      <td>Installation Empty</td>
+			      <td>{{ swul }}</td>
+			      <td>{{ ssg }}</td>
+			    </tr>
+			    
+			  </tbody>
+			</table>
+
+		</div>
+    </div>
+
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>
